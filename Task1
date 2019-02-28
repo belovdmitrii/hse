@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+const unsigned int L = 20; //ЗДЕСЬ ЗАДАЕМ ДЛИНУ БЛУЖДАНИЯ
+char lattice[2 * L + 1][2 * L + 1];
+unsigned int walks[L + 1];
+
+void steps(int x, int y, int step) {
+	if (step <= L + 1) {
+		if (lattice[x + 1][y] == 0) {
+			lattice[x + 1][y] = 'r';
+			walks[step - 1]++;
+			steps(x + 1, y, step + 1);
+			lattice[x + 1][y] = 0;
+		}
+		if (lattice[x - 1][y] == 0) {
+			lattice[x - 1][y] = 'l';
+			walks[step - 1]++;
+			steps(x - 1, y, step + 1);
+			lattice[x - 1][y] = 0;
+		}
+		if (lattice[x][y + 1] == 0) {
+			lattice[x][y + 1] = 'u';
+			walks[step - 1]++;
+			steps(x, y + 1, step + 1);
+			lattice[x][y + 1] = 0;
+		}
+		if (lattice[x][y - 1] == 0) {
+			lattice[x][y - 1] = 'd';
+			walks[step - 1]++;
+			steps(x, y - 1, step + 1);
+			lattice[x][y - 1] = 0;
+		}
+	}
+}
+
+int main() {
+
+	for (size_t i = 0; i < 2 * L + 1; i++) {
+		for (size_t j = 0; j < 2 * L + 1; j++) {
+			lattice[i][j] = 0;
+		}
+	}
+
+	for (size_t i = 0; i <= L; i++) {
+		walks[i] = 0;
+	}
+
+	lattice[L][L] = 1; // (L ; L) - координата центра решетки, начала блужданий
+	steps(L, L, 2);
+
+	for (size_t i = 0; i <= L; i++) {
+		cout << walks[i] << endl;
+	}
+	system("pause");
+	return 0;
+}
